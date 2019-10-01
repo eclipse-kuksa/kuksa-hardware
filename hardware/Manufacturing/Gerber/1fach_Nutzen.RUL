@@ -1,0 +1,5 @@
+DRC Rules Export File for PCB: C:\Users\rpt2rng\Desktop\20190523_AEX1_PiOBD_V0.2_20190401\AEX1_PiOBD_V0.2_20190401\1fach_Nutzen.PcbDoc
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=10.00
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=10.00
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
