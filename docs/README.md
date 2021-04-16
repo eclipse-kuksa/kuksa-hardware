@@ -119,30 +119,26 @@ Where **<SSID>** is the identification name of your Wifi network and **<PASSWD>*
 
 The board is designed to use the [STN2120 Chip](https://www.obdsol.com/solutions/chips/stn2120/) for OBD-II connectivity to send and receive messages form a Controller Area Network (CAN). The chip is ELM327 compatible, but bigger, faster and meaner!. You have to configure the baud rate of the CAN transceiver to the serial console in order to receive messages correctly.
 
-Once you have installed any Debian based operating system (e.g., Raspbian OS, or Ubuntu), you have to configure the ELM327 serial bus to read/write to CAN transceiver. On the Dongle, you have to establish a connection to the CAN transceiver (e.g., using the "screen" command line tool - use "sudo apt get install screen" if not installed). Via "dmesg" you can check for the CAN transceiver device. In our setup, the following command worked:
-
-```sh
-# connect to the ELM327 serial bus using 'screen'
-kuksa@pi:~$ sudo screen /dev/ttyAMA0 9600 81N
-```
+Once you have installed any Debian based operating system (e.g., Raspbian OS, or Ubuntu), you have to configure the ELM327 serial bus to read/write to CAN transceiver. On the Dongle, you have to establish a connection to the CAN transceiver (e.g., using the "screen" command line tool - use "sudo apt get install screen" if not installed). Via "dmesg" you can check for the CAN transceiver device (typically */dev/ttyAMA0*).
 Once connected, you need to configure the ELM327 baud rate. You can check the entire [STN2120 Chip Manual](https://www.scantool.net/scantool/downloads/98/stn11xx21xx_frpm-c.pdf) for further configuration options.
 
 ```sh
 # connect to the ELM327 serial bus using 'screen'
-kuksa@pi:~$ sudo sceen /dev/ttyAMA0 9600 81N
-> STSBR 2000000     # configure the baud rate to 2 MBit/s
+kuksa@pi:~$ sudo screen /dev/ttyAMA0 9600
+> STSBR 2000000     # configure the baud rate to 2 MBit/s in RAM
 > "OK"              # prompts OK
-> <CTRL + K>        # exit screen
+> <CTRL + K>        # exit screen or CTRL + ALT + DEL to reboot the Dongle
 # connect again to persist the config changes
-kuksa@pi:~$ sudo sceen /dev/ttyAMA0 2000000 81N
-> STWBR             # persist baud rate
-> <CTRL + K>        # exit screen -> there will not be an OK
+kuksa@pi:~$ sudo screen /dev/ttyAMA0 2000000
+> STWBR             # persist baud rate in ROM -> there will be NO response
+> <CTRL + K>        # exit screen or CTRL + ALT + DEL to reboot the Dongle
 ```
 
 You are DONE. Your CAN transceiver is configured. In order to test your CAN communication, you can create a Python script to test the CAN communication (e.g., https://python-obd.readthedocs.io/en/latest/). Please check the python-obd manual to check the properties to set to connect to the serial bus and configure the new baud rate.
 
 ```python
-# python-obdtest.py
+# pip3 install obd
+# python3 python-obdtest.py
 import obd
 
 connection = obd.OBD(portstr="/dev/ttyAMA0", baudrate=2000000) # create connection
