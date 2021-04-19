@@ -3,15 +3,18 @@
 This documentation provides information about setting up the Kuksa dongle.
 
 ## Table of Contents
-1. [Pre-requisits](#Pre-requisits)
+1. [Hardware Pre-requisites](#hardware-pre-requisites)
 2. [OS Installation](#installation-of-os)  
  2.1 [Raspbian OS](#raspbian-os)  
  2.2 [Ubuntu OS](#ubuntu-os)
 3. [OBD STN2120 Configuration](#obd-stn2120-configuration)
-4. [Troubleshooting](#troubleshooting)
+4. [Configure WiFi Access Point](#configure-wireless-access-point-interface)  
+ 4.1 [Hostapd Configuration](#hostapd-configuration)  
+ 4.2 [Dnsmasq Configuration](#dnsmasq-configuration)  
+ 4.3 [Wireless Interface and Static IP](#wireless-interface-and-static-ip)
+5. [Troubleshooting](#troubleshooting)
 
-
-## Pre-requisits
+## Hardware Pre-requisites
 
 ##### Mandatory
 
@@ -114,7 +117,6 @@ network:
 
 Where **<SSID>** is the identification name of your Wifi network and **<PASSWD>** is the password to authenticate the node to your Wifi network. Once the network has been configured, you have to restart the network manager or reboot your system to get the changes effective.
 
-
 ## OBD STN2120 Configuration
 
 The board is designed to use the [STN2120 Chip](https://www.obdsol.com/solutions/chips/stn2120/) for OBD-II connectivity to send and receive messages form a Controller Area Network (CAN). The chip is ELM327 compatible, but bigger, faster and meaner!. You have to configure the baud rate of the CAN transceiver to the serial console in order to receive messages correctly.
@@ -152,6 +154,129 @@ print(response.value.to("mph")) # user-friendly unit conversions
 ```
 
 We suggest to use the FreeMatics OBD-II Emulator Mk2: https://freematics.com/products/freematics-obd-emulator-mk2/  to send CAN messages to the Kuksa Dongle which you should receive on the Python script.
+
+## Configure Wireless Access Point Interface
+
+In order to be able to access in-vehicle data in a real deployment of the Dongle, wireless connectivity is required.
+The simplest way to achieve such functionality is to configure a wireless network interface to act as an access point using WiFi.
+
+#### Why do you need a WiFi USB Dongles and which one?
+
+As the Raspberry Pi Compute Module 3 does not provide a WiFi card onboard, you have to order a **mini** WiFi USB dongle (small form factor to fit into the Kuksa Dongle housing). Not all dongles work out of the box with Ubuntu due to missing support of the chip set in the Linux kernel. We tested a couple of Dongles (in 2020/2021) and had good experience with WiFi Dongles equipped with a **Ralink RT5370** chip (e.g., [EDUP Nano Adapter EP at Amazon](https://www.amazon.de/-/en/gp/product/B00BXWU7X4/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)).
+
+### Pre-requisites
+
+To configure a access point on the Kuksa Dongle, we need three features: (i) tool to switch a Wifi PHY/MAC into access point mode - here using **hostapd**, (ii) a tool to act as a DHCP server and route traffic on this interface accordingly - here using **dnsmasq**, and (iii) configuring a wireless network interface in you network manager (e.g., using netplan or systemd-networkd). In this documentation we are using **systemd-networkd** which is more stable and simple to configure the network interface compared to netplan.
+
+Install the tools via command line:
+
+```sh
+ubuntu@ubuntu:~$ sudo apt install hostapd dnsmasq
+```
+
+**Attention: When you have set up a wireless interface previously to operate as a client (cf. [Configure Network Interfaces in Ubuntu](#configure-network-interfaces-in-ubuntu)), you have to ensure that you are configuring the right interface to act as a WiFi access point. In case it should be the previously configured *wlan0* interface, you have to delete the lines configured */etc/netplan/50-cloud-init.yaml* file accordingly. If you want to configure an additional one, make sure you are configuring the right interface in the upcoming subsections.**
+
+### Hostapd Configuration
+
+Hostapd allows us to switch a WiFi card or WiFi USB dongle into the access point mode and to configure access point related information such as the SSID or the authentication password. After installing the tool, you have to provide a configuration for your access point. Write the following lines in the configuration file:
+
+```sh
+ubuntu@ubuntu:~$ sudo nano /etc/hostapd/hostapd.conf
+interface=<INTERFACE>
+driver=nl80211
+ssid=<YOUR_SSID>
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=<YOUR_PASSWORD>
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+```
+where *<INTERFACE>* is the network interface to switch into access point mode (e.g., wlan0), *<YOUR_SSID>* is the name of your wireless network (e.g., KuksaWifi), and *<YOUR_PASSWORD>* is the password used for authentication (make sure that your passphrase is at least 8 characters long).
+
+You can check your configuration file using the following command:
+
+```sh
+ubuntu@ubuntu:~$ sudo hostapd -dd /etc/hostapd/hostapd.conf
+```
+
+After your configuration has been validated, we have to tell the hostapd systemd service which configuration file to be used (default is none - so change the line starting with *#DAEMON_CONF*) as well as enable the service at boot phase of the system.
+
+```sh
+ubuntu@ubuntu:~$ sudo nano /etc/default/hostapd
+...
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+...
+ubuntu@ubuntu:~$ sudo systemctl unmask hostapd
+ubuntu@ubuntu:~$ sudo systemctl enable hostapd
+ubuntu@ubuntu:~$ sudo systemctl start hostapd
+```
+
+When rebooting your system, you see your configured access network in the list of available WiFi networks (e.g., Laptop or SmartPhone). However, your device gets no IP address assigned so far - this is handled by *dnsmasq* (see below).
+
+### Dnsmasq Configuration
+
+Dnsmasq sets up a DHCP server and a router so devices connecting to the Kuksa Dongle can get an IP address assigned to it.
+
+First, we recommend to make a backup of the default configuration file. After that, provide the inputs of your configuration and reload and enable the tool using systemctl.
+
+By providing the inputs, you can un-comment the predefined entries in the file according to your setup. For a simple setup, the following lines are sufficient:
+
+```sh
+ubuntu@ubuntu:~$ sudo cp /etc/dnsmasq.conf /etc/dnsmasq.conf.BACKUP   # make a backup of the default conf
+ubuntu@ubuntu:~$ sudo nano /etc/dnsmasq.conf
+...
+# to manage only WLAN0 interface - make sure the name of the interface is correct
+interface=wlan0
+# to assign addresses between 192.168.4.2 and 192.168.4.20 with netmask 255.255.255.0 and lease time 24 hours
+dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+...
+```
+On system startup, dnsmasq will not wait for the configured network interface (e.g., wlan0) to initialize and will fail with error "<INTERFACE> not found".
+
+We need to configure the systemd service to launch after the network is ready. So you have to modify dnsmasq.service file by adding the right target under the *[Unit]* section.
+
+```sh
+ubuntu@ubuntu:~$ sudo nano /lib/systemd/system/dnsmasq.service
+...
+[Unit]
+...
+After=network-online.target
+Wants=network-online.target
+...
+ubuntu@ubuntu:~$ sudo systemctl reload dnsmasq	# reload dnsmasq config
+ubuntu@ubuntu:~$ sudo systemctl enable dnsmasq
+```
+
+### Wireless Interface and Static IP
+
+Ubuntu uses by default cloud-init for the initial setup. But the configuration is not that simple/intuitive compared to systemd-networkd. So we are using this network management to configure the wireless network interface. A proper documentation of systemd-networkd can be found on the [Systemd-Networkd ArchLinux Website](https://wiki.archlinux.org/index.php/systemd-networkd).
+
+In order to connect to a wireless network with **systemd-networkd**, a wireless adapter configured is required.
+
+```sh
+ubuntu@ubuntu:~$ sudo nano /etc/systemd/network/25-wireless.network
+[Match]
+Name=wlan0					      # the name of your interface you want to configure
+
+[Network]
+DHCP=no						        # 'no' as managed by dnsmasq
+Address=192.168.4.1/24		# assign static IP address, link to dnsmasq
+
+ubuntu@ubuntu:~$ sudo systemctl reload dnsmasq	# reload dnsmasq config
+ubuntu@ubuntu:~$ sudo systemctl enable dnsmasq
+```
+
+After the creating the configuration, you have to reload the service and maybe also enable it to be executed after a reboot of the system.
+
+You are done and should be able to connect another device to the Kuksa Dongle.
+
+After rebooting your system, it could be possible that systemd-networkd is waiting for the network to be initialized, resulting in longer bootup time (message something like "a start job is waiting until the network is configured"). Different proposals to overcome the limitation are described on a [StackOverflow Thread](https://askubuntu.com/questions/972215/a-start-job-is-running-for-wait-for-network-to-be-configured-ubuntu-server-17-1).
 
 ## Troubleshooting
 
