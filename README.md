@@ -21,7 +21,7 @@ information can be accessed in the links below.
 ## Operational Matters
 
 * [Hardware Schematics](./hardware/Readme.md)
-* [3D Housing](./housing)
+* [3D Housing](./housing/README.md)
 * [Setup Guide](./docs/README.md)
 
 ## The Project
