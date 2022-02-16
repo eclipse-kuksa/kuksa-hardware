@@ -101,7 +101,11 @@ sudo ./rpiboot -d recovery
 ```
 
 Live the Pi. Now turn you attention back to the CANOPi.
-Fit a jumper on `nRPIREBO` and `GND`. Fit a CM4. If you have followed this fine manual, the _first_ SD card is still inserted.
+Fit a jumper on `nRPIREBO` and `GND`. You can find the pin header on the top board. see the following picture for reference
+
+![nRPIREBO jumper](../hw_doc/img/nRPIREBO_jumper.png)
+
+Fit a CM4. If you have followed this fine manual, the _first_ SD card is still inserted.
 
 Now, connect one USB port from the Raspberry Pi to the microUSB port of the CANOPi dongle. Power on the CANOPi dongle and the flash process should initiate.  A regular blinking pattern of the green LED or, in case a screen is connected, an entirely green screen indicates a finished and successful flash procedure.
 
