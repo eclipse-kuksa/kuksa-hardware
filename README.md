@@ -21,3 +21,7 @@ With the CANOPi you have all the ingredients for hacking vehicles and prototypin
  * Altium EDA project files: In case you want to modify the schematics: TBD
 
 ## How to setup
+
+If you set up a fresh CM4 that has never been used before in CANOPi you need to update the EEPROM first
+
+ * [Updating CM4 EEPROM for CANOPi](./sw_doc/update_eeprom.md)
