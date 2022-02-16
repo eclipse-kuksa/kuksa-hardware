@@ -25,3 +25,7 @@ With the CANOPi you have all the ingredients for hacking vehicles and prototypin
 If you set up a fresh CM4 that has never been used before in CANOPi you need to update the EEPROM first
 
  * [Updating CM4 EEPROM for CANOPi](./sw_doc/update_eeprom.md)
+
+ In order to make full use of all hardware components, you need to configure your Raspberry OS
+
+  * [Enabling Hardware support in your OS](./sw_doc/configure_raspberryos.md)
