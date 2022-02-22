@@ -1,12 +1,12 @@
 # Enabling Hardware support in your OS
 
-To be able to make use of all hardware on CANOPi you need to configure your Linux distirbution accordingly.
+To be able to make use of all hardware on CANOPi you need to configure your Linux distribution accordingly.
 
-This guide assumes you are using a current (as of 2022) Raspberry Pi OS version based on Debian Buster.
+This guide assumes you are using a current (as of 2022) Raspberry Pi OS version based on Debian Bullseye.
 
-The instructions should work on other distirbutions that also follow the Raspberry OS boot procedure provding a similarly recent kernel.
+The instructions should work on other distributions that also follow the Raspberry OS boot procedure providing a similarly recent kernel.
 
-Many things involving editing `config.txt` file on the boot partition to extend the device tree. The device tree is the structre that tells the Linux kernel which hardware is available. As the boot partiton is a FAT aprtition you can make these modifcations easily even on Windows or OS X after [flashing the operating system](https://www.raspberrypi.com/software/), before booting the first time
+Before booting the first time the OS on the device, you have to modify the `config.txt` file on the boot partition to extend the device tree. The device tree is the structure that tells the Linux kernel which hardware is available. As the boot partition is a FAT partition you can make these modifications easily even on Windows or OS X after [flashing the operating system](https://www.raspberrypi.com/software/), before booting the first time
 
 ## General settings
 Make sure you have the following entries in you `config.txt`
@@ -33,7 +33,7 @@ After reboot check, if the `can0` and `can1` interfaces are available, i.e. usin
 ifconfig -a
 ````
 
-or 
+or
 
 ```
 dmesg | grep spi
@@ -71,21 +71,21 @@ For more information on the supported commands check [general information](https
 If you want to use the OBD port, we recommend increasing the default baudrate. See the programming manual for details. You can also (mis)-use the OBD connection as general CAN sniffer, but there are performance limitations. See the [KUKSA.val DBC feeder documentation](https://github.com/eclipse/kuksa.val/tree/master/kuksa_feeders/dbc2val#elmobdlink-support) for details. Generally we recommend using the real CAN ports for CAN access, and use the STN2120 for OBD access only.
 
 ## Realtime Clock
-CANOPi contains an RTC, which means the board can keep time even when powered of. This is important because most cryptogrpahic protocols break if a system comes back of with a wrong time.
+CANOPi contains an RTC, which means the board can keep time even when powered of. This is important because most cryptographic protocols break if a system comes back with a wrong time.
 
 To use the RTC uncomment/add the following lines to `config.txt`
 
 ```
 dtparam=i2c_vc=on
-dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi ,addr=0x51
+dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi,addr=0x51
 ```
 
-Reboot and type 
+Reboot and type
 
 ```
 dmesg | grep rtc
 ```
- 
+
  to see whether the clock has been detected and
 
 ```
@@ -99,7 +99,7 @@ to show the system clock.
 
 To enable the camera port you need to download https://datasheets.raspberrypi.com/cmio/dt-blob-cam1.bin and rename it to `dt-blob.bin` and put it into your /boot partition.
 
-If you have already booted the OS you can acheive it by typing
+If you have already booted the OS you can achieve it by typing
 
 ```
 sudo wget https://datasheets.raspberrypi.com/cmio/dt-blob-cam1.bin -O /boot/dt-blob.bin
@@ -115,7 +115,7 @@ camera_auto_detect=1
 And then reboot. Check the [Raspberry camera documentation](https://www.raspberrypi.com/documentation/accessories/camera.html) for further information.
 
 
-## Enable Celluar card
+## Enable Cellular card
 If you fitted a cellular modem to the M2 slot, you need to enable the card first
 
 On the CANOPi type
@@ -134,10 +134,10 @@ You should be able to see the card on the USB bus by typing
 lsusb
 ```
 
-This shoudl work with any Linux supported cellular card. We had succes with a [Sierra Wireless EM7455](https://www.sierrawireless.com/iot-solutions/products/em7455/).
+This shoudl work with any Linux supported cellular card. We had success with a [Sierra Wireless EM7455](https://www.sierrawireless.com/iot-solutions/products/em7455/).
 
 ## Fan control
-CANOPi offers a dedicated switchable power connection to operate a fan. The connection can be configured to supply either a 12V or a 5V voltage at a maximum current of 115mA (default is 12V). 
+CANOPi offers a dedicated switchable power connection to operate a fan. The connection can be configured to supply either a 12V or a 5V voltage at a maximum current of 115mA (default is 12V).
 
 Type
 
@@ -160,8 +160,3 @@ To switch it off
 ```
 echo "0" >/sys/class/gpio/gpio25/value
 ```
-
-
-
-
-
