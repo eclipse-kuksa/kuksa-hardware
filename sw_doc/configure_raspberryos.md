@@ -137,7 +137,12 @@ lsusb
 This shoudl work with any Linux supported cellular card. We had success with a [Sierra Wireless EM7455](https://www.sierrawireless.com/iot-solutions/products/em7455/).
 
 ## Fan control
-CANOPi offers a dedicated switchable power connection to operate a fan. The connection can be configured to supply either a 12V or a 5V voltage at a maximum current of 115mA (default is 12V).
+The CANOPi dongle offers a dedicated switchable power connection to operate a fan. The connection can be configured to supply either the input voltage (typically 12V) or a 5V voltage at a maximum current of 115mA (default is 5V). 
+
+To change the voltage, move Jumper JP600 (on the back side) from position 1-3 (5V) to position 1-2 (VIN). The combinations are also indicated on the silk screen.
+
+The fan is connected to Pins 1 and 2 on the JP601 header. If unsure about the jumper setting, measure voltage across this pins first, before connecting fan.
+
 
 Type
 
