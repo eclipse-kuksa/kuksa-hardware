@@ -8,7 +8,7 @@ This repository contains information and manufacturing files for the CANOPi auto
 
 The Eclipse KUKSA CANOPi is a baseboard for the [Raspberry Compute Module 4 (CM4)](https://www.raspberrypi.com/products/compute-module-4).
 
-With the CANOPi you have all the ingredients for hacking vehicles and prototyping Software Defined Vehicle
+With the CANOPi you have all the ingredients for hacking vehicles and prototyping Software Defined Vehicle functions and applications.
 
  * Compatible with the Raspberry Pi ecosystem thanks to the CM4
  * Up to 8GB of RAM and up to 32GB eMMC or any size micro SD card storage
@@ -22,7 +22,7 @@ With the CANOPi you have all the ingredients for hacking vehicles and prototypin
 ## What you can find here
  * Find schematics board renders and BOM lists in [./hw_doc/](./hw_doc/)
  * You can find GERBER files needed to manufacture the PCB in [./manufacturing](./manufacturing) 
- * Altium EDA project files: In case you want to modify the schematics: TBD
+ * [Altium Designer](https://www.altium.com/altium-designer) EDA project file nn case you want to modify the schematics can be found in [./EDA](./EDA). 
 
 ## How to setup
 
