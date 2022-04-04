@@ -3,8 +3,8 @@
 This repository contains information and manufacturing files for the CANOPi automotive prototyping plattform.
 
 
-<img src="./hw_doc/img/CANOPi_bottom_frei.png" height="200"  style="margin:10px 10px">
-<img src="./hw_doc/img/CANOPi_top_frei.png" width="200"  style="margin:10px 10px">
+<img src="./hw_doc/img/CANOPi_bottom_frei.png" width="700"  style="margin:10px 10px">
+<img src="./hw_doc/img/CANOPi_top_frei.png" width="700"  style="margin:10px 10px">
 
 The Eclipse KUKSA CANOPi is a baseboard for the [Raspberry Compute Module 4 (CM4)](https://www.raspberrypi.com/products/compute-module-4).
 
