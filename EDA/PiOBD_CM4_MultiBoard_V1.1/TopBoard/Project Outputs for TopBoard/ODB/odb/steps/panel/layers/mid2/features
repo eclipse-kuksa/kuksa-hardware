@@ -1,0 +1,19 @@
+#Layer_Physical_Order=3
+#Layer_Color=16440176
+#
+#Feature symbol names
+#
+
+#
+#Feature attribute names
+#
+@0 .geometry
+@1 .pad_usage
+
+#
+#Feature attribute text strings
+#
+
+#
+#Layer features
+#

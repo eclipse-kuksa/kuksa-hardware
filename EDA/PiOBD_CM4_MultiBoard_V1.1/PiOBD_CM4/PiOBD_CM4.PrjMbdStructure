@@ -1,0 +1,4 @@
+Record=DiagramHierarchy|SourceDocument=PiOBD_CM4_Schematic.MbsDoc|Kind=Multi-board Schematic Module|Designator=BaseBoard|Source=..\BaseBoard\BaseBoard.PrjPcb
+Record=SubProject|SourceDocument=PiOBD_CM4_Schematic.MbsDoc|ProjectPath=..\BaseBoard\BaseBoard.PrjPcb
+Record=DiagramHierarchy|SourceDocument=PiOBD_CM4_Schematic.MbsDoc|Kind=Multi-board Schematic Module|Designator=TopBoard|Source=..\TopBoard\TopBoard.PrjPcb
+Record=SubProject|SourceDocument=PiOBD_CM4_Schematic.MbsDoc|ProjectPath=..\TopBoard\TopBoard.PrjPcb
