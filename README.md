@@ -1,29 +1,35 @@
-# Eclipse Kuksa Hardware
+# Eclipse KUKSA CANOPi  Hardware 
 
-![Eclipse Kuksa Figure](https://raw.githubusercontent.com/eclipse/kuksa.val/master/doc/pictures/logo.png)
-<img src="./docs/figures/kuksa_dongle.png" alt="drawing" width="300"/>
+This repository contains information and manufacturing files for the CANOPi automotive prototyping plattform.
 
-This repository contains information about the the Eclipse Kuksa project and available hardware.
-It includes hardware schematics and manufacturing files, housing details for 3D printers, as
-well as a setup guide. Please use the links below to one of the manuals.
 
-## Eclipse Kuksa Retrofit Dongle
+<img src="./hw_doc/img/CANOPi_bottom_frei.png" width="700"  style="margin:10px 10px">
+<img src="./hw_doc/img/CANOPi_top_frei.png" width="700"  style="margin:10px 10px">
 
-While [Eclipse Kuksa](https://www.eclipse.org/kuksa/) cares about to interconnect
-vehicles with external services, typically vehicles already on the road do not
-provide any mechanisms to install software afterwards. The Eclipse Kuksa prototyping
-platform describes a retrofit solution for already existing vehicles. It can be
-directly connected to the in-vehicle OBD II interface. The platform combines a
-Raspberry Pi Compute Module, several options to communicate information
-(e.g., via cellular or WiFi connectivity) and access to OBD. The most important
-information can be accessed in the links below.
+The Eclipse KUKSA CANOPi is a baseboard for the [Raspberry Compute Module 4 (CM4)](https://www.raspberrypi.com/products/compute-module-4).
 
-## Operational Matters
+With the CANOPi you have all the ingredients for hacking vehicles and prototyping Software Defined Vehicle functions and applications.
 
-* [Hardware Schematics](./hardware/Readme.md)
-* [3D Housing](./housing/README.md)
-* [Setup Guide](./docs/README.md)
+ * Compatible with the Raspberry Pi ecosystem thanks to the CM4
+ * Up to 8GB of RAM and up to 32GB eMMC or any size micro SD card storage
+ * integrated SIM card slot and M2 slot to add cellular connectivity
+ * Can be powered via a vehicle's [OBD Port](https://en.wikipedia.org/wiki/On-board_diagnostics#OBD-II) 
+ * [STN2120 OBD-II](https://www.obdsol.com/solutions/chips/stn2120/) to access vehicle data on OBD (only CAN supported by hardware)
+ * Two [MCP251xFD](https://www.microchip.com/en-us/product/MCP2518FD) based [CAN-FD](https://en.wikipedia.org/wiki/CAN_FD) interfaces allowing interfacing two vehicle classic CAN or CAN FD busses directly.
+ * [PCF85036A Realtime clock](https://www.nxp.com/products/peripherals-and-logic/signal-chain/real-time-clocks/rtcs-with-ic-bus/tiny-real-time-clock-calendar-with-alarm-function-and-ic-bus:PCF85063A)
 
-## The Project
-* [Eclipse Kuksa](https://www.eclipse.org/kuksa/)
-* [Licensing](./LICENSE)
+
+## What you can find here
+ * Find schematics board renders and BOM lists in [./hw_doc/](./hw_doc/)
+ * You can find GERBER files needed to manufacture the PCB in [./manufacturing](./manufacturing) 
+ * [Altium Designer](https://www.altium.com/altium-designer) EDA project file nn case you want to modify the schematics can be found in [./EDA](./EDA). 
+
+## How to setup
+
+If you set up a fresh CM4 that has never been used before in CANOPi you need to update the EEPROM first
+
+ * [Updating CM4 EEPROM for CANOPi](./sw_doc/update_eeprom.md)
+
+ In order to make full use of all hardware components, you need to configure your Raspberry OS
+
+  * [Enabling Hardware support in your OS](./sw_doc/configure_raspberryos.md)
