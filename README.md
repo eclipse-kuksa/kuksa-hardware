@@ -33,3 +33,6 @@ If you set up a fresh CM4 that has never been used before in CANOPi you need to 
  In order to make full use of all hardware components, you need to configure your Raspberry OS
 
   * [Enabling Hardware support in your OS](./sw_doc/configure_raspberryos.md)
+
+  If you use a compute module with integrated flash (eMMC), read
+    * [How to flash eMMC compute modules](./sw_doc/flash-emmc.md)
