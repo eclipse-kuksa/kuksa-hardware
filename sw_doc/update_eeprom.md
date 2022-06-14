@@ -64,10 +64,11 @@ cd ~/usbboot/recovery
 rm -f pieeprom.original.bin
 ```
 
-Download a new file with
+Download a recent stable eeprom from https://github.com/raspberrypi/rpi-eeprom/raw/master/firmware/stable/,
+for example
 
 ```
-curl -L -o pieeprom.original.bin https://github.com/raspberrypi/rpi-eeprom/raw/master/firmware/stable/pieeprom-2021-12-02.bin
+curl -L -o pieeprom.original.bin https://github.com/raspberrypi/rpi-eeprom/raw/master/firmware/stable/pieeprom-2022-04-26.bin
 ```
 
 Edit the **boot.conf** file to support the VL805 USB controller and configure proper poweroff behavior for CANOPi. Therefore, type
