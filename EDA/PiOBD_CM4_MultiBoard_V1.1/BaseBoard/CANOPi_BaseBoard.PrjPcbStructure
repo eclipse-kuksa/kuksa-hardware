@@ -1,0 +1,5 @@
+Record=TopLevelDocument|FileName=CANOPi_Baseboard_CAN.SchDoc|SheetNumber=3
+Record=NoMainPathDocument|SourceDocument=CANOPi_Baseboard_CAN.SchDoc|FileName=CANOPi_Baseboard_LTE.SchDoc|SheetNumber=4
+Record=NoMainPathDocument|SourceDocument=CANOPi_Baseboard_CAN.SchDoc|FileName=CANOPi_Baseboard_PWR.SchDoc|SheetNumber=1
+Record=NoMainPathDocument|SourceDocument=CANOPi_Baseboard_CAN.SchDoc|FileName=CANOPi_Baseboard_RTC.SchDoc|SheetNumber=5
+Record=NoMainPathDocument|SourceDocument=CANOPi_Baseboard_CAN.SchDoc|FileName=CANOPi_Baseboard_STN2100.SchDoc|SheetNumber=2
